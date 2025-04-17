@@ -2,6 +2,8 @@ package org.example;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +16,7 @@ public class LibraryTest {
     }
 
     @Nested
+    @Tag("modification")
     class BookAdditionAndRemovalTests {
         @Test
         void shouldAddBookSuccessfully() {
@@ -41,9 +44,19 @@ public class LibraryTest {
             assertEquals(0, library.listBooks().size(), "Library should be empty after removing the book");
             assertFalse(library.listBooks().contains(book), "Library should not contain the removed book");
         }
+
+        @RepeatedTest(5)
+        void shouldHandleRepeatedAddAndRemove() {
+            Book book = new Book("The Hobbit", "J.R.R. Tolkien", "12345");
+            library.addBook(book);
+            assertEquals(1, library.listBooks().size(), "Library should contain one book after adding");
+            library.removeBook("12345");
+            assertEquals(0, library.listBooks().size(), "Library should be empty after removing the book");
+        }
     }
 
     @Nested
+    @Tag("search")
     class BookSearchTests {
         @Test
         void shouldFindExistingBook() {
